@@ -1,0 +1,55 @@
+This project utilizes the Texas Instruments ez430-RF2500 Wireless Development 
+Tool to perform wireless data logging of 6 ADC inputs at configurable sample 
+rates of up to 1.78kHz. The project was developed using IAR Embedded Workbench
+kickstart edition version 5.20.
+
+The wireless data logging system contains three components: 
+1) Wireless end device - eZ430-RF2500 board that does the data acquisition. When
+triggered by the onboard button or a signal from the python data logging program,
+this device will acquire data from 6 ADC inputs and store the data in flash 
+memory until the memory is filled. When the flash memory is full, the device will wirelessly send the data to the access point which forwards it on to the python 
+data logging program.
+
+2) Wireless access point - eZ430-RF2500 board that acts as an information relay 
+between the wireless end device and the computer. It is plugged in to the ez430 
+USB adapter and communicates with the computer through a virtual serial port.
+
+3) Python data logging program (on computer) - This program provides a graphical
+interface in which you are able to view/save capture data and trigger the start
+of a data acquisition sequence. Raw data can be saved to a file in comma
+separated value format. This program requires python 2.7, pySerial 2.5, 
+matplotlib, and wxPython.
+
+
+Quick tutorial on how to get the project up and running:
+1)  Download all the files in the git repository to your local machine.
+2)  Open 6ADC_toFlash_Bidirectional.eww in IAR workbench.
+3)  Plug in the eZ430-RF2500 USB programmer into your computer with a target board
+    connected.
+4)  In the "workspace" window of IAR, select "End Device" from the drop down 
+    list. Then select "Make" from the "Project" menu. Download the application
+    into the eZ430-RF2500 by selecting Download->Download Active Application
+    from the the "Project" menu. Now the target board is loaded with the end
+    device program.
+5)  Unplug the end device target board from the USB programmer and replace it 
+    with a blank eZ430-RF2500 target board. In the "workspace" window of IAR, 
+    select "Access Point". Make the project and download the application into
+    the target board.
+6)  Exit IAR workbench.
+7)  Verify that you have all the pre-requisite python modules installed.
+8)  Run readADCvaluesWithVis_v1_4.py
+9)  Enter the serial port that the eZ430 USB is using.
+10) Press the "Start ADC" button in the MSP430 ADC Value Plotter window and wait
+    for data to start appearing on the plot. The LEDs on the end device should 
+    blink at half the sampling rate while data is being sampled.
+
+To vary the sampling rate, adjust TACCR0 in the main_ED.c file.
+// 6 = 1.78 kHz
+// 8 = 1.37 kHz
+// 10 = 1.12 kHz
+// 12 = 943 Hz
+// 14 = 819 Hz
+// 16 = 735 Hz
+// 18 = 653 Hz
+// 19 = 621 Hz
+// 20 = 591 Hz
